@@ -8,8 +8,6 @@ from playwell.exceptions import (
     PlaywellNotFoundError,
 )
 
-__version__ = '1.0.0'
-
 __all__ = [
     "Playwell",
     "ServerStatus",

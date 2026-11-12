@@ -35,7 +35,7 @@ class Playwell:
         self._client = httpx.Client(
             base_url=self.base_url,
             timeout=timeout,
-            headers={"User-Agent": "playwell-py/" + __version__},
+            headers={"User-Agent": "playwell-py/1.0.0"},  # remember to adjust version number for each release!
             follow_redirects=True,
             transport=transport,
         )
