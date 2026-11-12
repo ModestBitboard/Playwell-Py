@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=84.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "playwell"
+version = "1.0.0"
+description = "A synchronous Python client wrapper for the Playwell LEGO instructions REST API."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-3.0-or-later" }
+authors = [
+    { name = "Bitboard", email = "contact@bitboard.ca" }
+]
+keywords = ["lego", "instructions", "api", "client", "playwell"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "httpx>=0.27.0",
+    "pytest>=9.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ModestBitboard/playwell-py"
+Repository = "https://github.com/ModestBitboard/playwell-py"
+Server = "https://github.com/ModestBitboard/playwell-server"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["playwell*"]
