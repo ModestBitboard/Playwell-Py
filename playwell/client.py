@@ -15,7 +15,6 @@ from playwell.models import (
     Kit,
     Instruction,
 )
-from . import __version__
 
 DEFAULT_SERVER_URL = "https://playwell.bitboard.ca"
 
