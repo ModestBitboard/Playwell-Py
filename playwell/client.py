@@ -34,7 +34,7 @@ class Playwell:
         self._client = httpx.Client(
             base_url=self.base_url,
             timeout=timeout,
-            headers={"User-Agent": "playwell-py/1.0.1"},  # remember to adjust version number for each release!
+            headers={"User-Agent": "playwell-py/1.1.0"},  # remember to adjust version number for each release!
             follow_redirects=True,
             transport=transport,
         )
@@ -130,7 +130,7 @@ class Playwell:
 
         return response.json()
 
-    def _stream_bytes(self, endpoint: str, chunk_size: int = 8192) -> Iterator[bytes]:
+    def _stream_asset(self, endpoint: str, chunk_size: int = 8192) -> Iterator[bytes]:
         """
         Internal generator that yields raw byte chunks from a binary endpoint.
         """
@@ -161,7 +161,7 @@ class Playwell:
 
     def _get_bytes(self, endpoint: str) -> bytes:
         """Fetches a binary asset from endpoint."""
-        return b"".join(self._stream_bytes(endpoint))
+        return b"".join(self._stream_asset(endpoint))
 
     def _download_file(self, endpoint: str, dest_path: Union[str, Path]) -> Path:
         """Streams a binary asset directly to disk without buffering the whole file in memory."""
@@ -169,7 +169,7 @@ class Playwell:
         target.parent.mkdir(parents=True, exist_ok=True)
 
         with target.open(mode="wb") as f:
-            for chunk in self._stream_bytes(endpoint):
+            for chunk in self._stream_asset(endpoint):
                 f.write(chunk)
 
         return target
@@ -230,7 +230,7 @@ class Playwell:
         return self._get_bytes(f"instructions/{instruction_id}/pdf")
 
 
-    # --- BINARY ENDPOINTS -> I/O ---
+    # --- BINARY ENDPOINTS -> DISK ---
 
     def download_kit_cover(self, kit_id: str, dest_path: Union[str, Path]) -> Path:
         """Streams the kit's cover image to a file."""
@@ -245,7 +245,15 @@ class Playwell:
         return self._download_file(f"instructions/{instruction_id}/pdf", dest_path)
 
 
-    # --- BINARY ENDPOINT [MISC] ---
+    # --- BINARY ENDPOINTS -> RAW ---
+    def stream_kit_cover(self, kit_id: str, chunk_size: int = 8192) -> Iterator[bytes]:
+        """Yields raw byte chunks of the kit's cover image for custom streaming pipelines."""
+        return self._stream_asset(f"kits/{kit_id}/cover", chunk_size=chunk_size)
+
+    def stream_instruction_cover(self, instruction_id: str, chunk_size: int = 8192) -> Iterator[bytes]:
+        """Yields raw byte chunks of the instruction's cover image for custom streaming pipelines."""
+        return self._stream_asset(f"instructions/{instruction_id}/cover", chunk_size=chunk_size)
+
     def stream_instruction_pdf(self, instruction_id: str, chunk_size: int = 8192) -> Iterator[bytes]:
-        """Yields raw byte chunks of an instruction PDF for custom streaming pipelines."""
-        return self._stream_bytes(f"instructions/{instruction_id}/pdf", chunk_size=chunk_size)
+        """Yields raw byte chunks of an instruction's PDF for custom streaming pipelines."""
+        return self._stream_asset(f"instructions/{instruction_id}/pdf", chunk_size=chunk_size)

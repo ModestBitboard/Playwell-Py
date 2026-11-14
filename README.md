@@ -1,8 +1,9 @@
 # Playwell-Py
 
-![GitHub License](https://img.shields.io/github/license/ModestBitboard/playwell-py)
-![PyPI Version](https://img.shields.io/pypi/v/playwell)
-![Python Version](https://img.shields.io/pypi/pyversions/playwell)
+![Playwell Version](https://img.shields.io/badge/playwell-v1-red)
+![GitHub License](https://img.shields.io/github/license/ModestBitboard/playwell-py?logo=gplv3&logoColor=white)
+![PyPI Version](https://img.shields.io/pypi/v/playwell?logo=pypi&logoColor=white)
+![Python Version](https://img.shields.io/pypi/pyversions/playwell?logo=python&logoColor=white)
 
 
 The official synchronous Python client SDK for [Playwell](https://github.com/ModestBitboard/playwell-server), a read-through caching REST API for LEGO kit metadata, cover artwork, and instruction manuals.
@@ -69,17 +70,20 @@ pw = Playwell()
 pw = Playwell(verify_version=False)
 ```
 
-## In-Memory Assets (Zero Disk I/O)
+## In-Memory & Raw Stream Assets
 
-For GUI applications or web services that want to render artwork without creating temporary files, use the `get_*` binary methods to fetch raw `bytes` directly into RAM:
+For GUI applications or web services that want to render artwork without creating temporary files, use the `get_*` binary methods to fetch raw `bytes` directly into RAM, or rely on `stream_*` methods to return a bytes iterator:
 
 ```python
 import io
 from playwell import Playwell
 
 with Playwell() as pw:
+    # Option 1. Fetch cover image bytes
     cover_bytes = pw.get_kit_cover("71374")
-    image_buffer = io.BytesIO(cover_bytes)
+    
+    # Option 2. Fetch cover image byte stream
+    cover_stream = pw.stream_kit_cover("71374")
 ```
 
 ## API Reference
@@ -94,11 +98,13 @@ with Playwell() as pw:
 | `search_instructions(description)`     | Searches cached instruction booklets by description.               | `list[Instruction]` |
 | `get_kit_cover(kit_id)`                | Fetches kit box artwork into RAM.                                  | `bytes`             |
 | `download_kit_cover(kit_id, path)`     | Streams kit box artwork directly to disk.                          | `Path`              |
+| `stream_kit_cover(kit_id)`             | Yields byte chunks of kit box artwork.                             | `Iterator[bytes]`   |
 | `get_instruction_cover(id)`            | Fetches booklet cover artwork into RAM.                            | `bytes`             |
 | `download_instruction_cover(id, path)` | Streams booklet cover artwork directly to disk.                    | `Path`              |
+| `stream_instruction_cover(id)`         | Yields byte chunks of booklet cover artwork.                       | `bytes`             |
 | `get_instruction_pdf(id)`              | Fetches instruction manual PDF into RAM.                           | `bytes`             |
 | `download_instruction_pdf(id, path)`   | Streams instruction manual PDF directly to disk.                   | `Path`              |
-| `stream_instruction_pdf(id)`           | Yields raw byte chunks for custom streaming pipelines.             | `Iterator[bytes]`   |
+| `stream_instruction_pdf(id)`           | Yields byte chunks of instruction manual PDF.                      | `Iterator[bytes]`   |
 
 ## Exceptions
 
@@ -112,9 +118,11 @@ All SDK exceptions inherit from `PlaywellError`:
 ## Related Projects
 
 * [playwell-server](https://github.com/ModestBitboard/playwell-server) - The FastAPI backend server.
+* [playwell-py](https://github.com/ModestBitboard/playwell-py) - The official Python SDK.
+* [playwell-go](https://github.com/ModestBitboard/playwell-go) - The official Go SDK.
 
 ## License
-Distributed under the GPLv3 License. See [LICENSE](./LICENSE) for more information.
+Distributed under the GPLv3 License. See [LICENSE](https://github.com/ModestBitboard/Playwell-Py/blob/main/LICENSE) for more information.
 
 ## Support
 If you liked this project, go ahead and give it a star! And if it really helped you out, consider sending me a tip.

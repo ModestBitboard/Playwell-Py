@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "playwell"
-version = "1.0.1"
+version = "1.1.0"
 description = "A synchronous Python client wrapper for the Playwell LEGO instructions REST API."
 readme = "README.md"
 requires-python = ">=3.10"
